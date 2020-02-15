@@ -1,0 +1,7 @@
+nodemon.json 
+uploads/
+package-lock.json
+.DS_Store
+node_modules
+Postman.app
+Postman-osx-7.18.0.zip
