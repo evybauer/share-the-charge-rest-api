@@ -1,7 +1,5 @@
 const express = require('express');
-const router = express.Router();
-// Express subpackage that gives capabilities to handle
-// different routes reaching different endpoints
+const router = express.Router(); // Express subpackage that gives capabilities to handle // different routes reaching different endpoints
 const mongoose = require('mongoose')
 const multer = require('multer') //Package that allows body-parser pass data other than json (ex.: photos)
 
@@ -15,6 +13,7 @@ const storage = multer.diskStorage({
   }
 });
 
+//PHOTO FILTER -- Check if file type is accepted by the DB
 const fileFilter = ( req, file, cb) => {
   if (file.mimetype === 'image/jpeg' || file.mimetype === 'image/png') {
      //accept a file
@@ -25,6 +24,7 @@ const fileFilter = ( req, file, cb) => {
   }
 };
 
+//PHOTO FILTER -- Check if file size is accepted by the DB
 const upload = multer({
   storage: storage, 
   limits: {
@@ -35,19 +35,48 @@ const upload = multer({
 
 const Charger = require('../models/charger');
 
+// ('/') means ('/chargers')
 router.get('/', (req, res, next) => {
   Charger.find()
-    .select('title cost_per_charge _id chargerPhoto')
+    // .select('title cost_per_charge _id chargerPhoto numberOfChargers') // To narrow the query
+    // .select('-dateCreated') // To narrow the query
     .exec()
     .then(docs => {
       const response = {
         count: docs.length,
         chargers: docs.map(doc => {
           return {
-            title: doc.title,
-            cost_per_charge: doc.cost_per_charge,
-            chargerPhoto: doc.chargerPhoto,
+
             _id: doc._id,
+            // ownerId: doc.ownerId,
+
+            title: doc.title,
+            chargerPhoto: doc.chargerPhoto,
+            costPerMinute: doc.costPerMinute,
+            numberOfChargers: doc.numberOfChargers,
+
+            street: doc.street,
+            city: doc.city,
+            stateOrProvince: doc.stateOrProvince,
+            postCode: doc.postCode,
+            countryId: doc.countryId,
+            latitude: doc.latitude,
+            longitude: doc.longitude,
+
+            generalComments: doc.generalComments,
+            usageRestriction: doc.usageRestriction, 
+            typeOfPlug: doc.typeOfPlug  , 
+            typeOfCharger: doc.typeOfCharger , 
+            active: doc.active , 
+            dateAvailableStart: doc.dateAvailableStart ,
+            dateAvailableEnd: doc.dateAvailableEnd ,
+            hourStart: doc.hourStart ,
+            hourEnd: doc.hourEnd,
+
+            // connectionId: doc.connectionId,
+
+            dateCreated: doc.dateCreated,  
+
             request: {
               type: 'GET',
               url: 'http://localhost:3000/chargers/' + doc._id
@@ -69,20 +98,45 @@ router.get('/', (req, res, next) => {
         error: err
       });
     });
-}); // ('/') means ('/chargers')
-//Handles get requests
+}); 
 
 //upload.single() is a middleware handling event that accespt one single file. 
 //Is passed as an argument in the POST route so it uploads the photo accordingly
 router.post('/', upload.single('chargerPhoto'),(req, res, next) => {
   // console.log(req.file); //-- Check info of the file uploaded
   //Store Data with Mongoose
-  const charger = new Charger({
+  console.log(req.file);
+  const charger = new Charger({     
     _id: new mongoose.Types.ObjectId(),
+    // ownerId: req.body.ownerId,
     title: req.body.title,
-    cost_per_charge: req.body.cost_per_charge,
-    chargerPhoto: req.file.path // Photo URL
+    chargerPhoto: req.file.path, // Photo URL
+    costPerMinute: req.body.costPerMinute,
+    numberOfChargers: req.body.numberOfChargers,
+
+    street: req.body.street,
+    city: req.body.city,
+    stateOrProvince: req.body.stateOrProvince,
+    postCode: req.body.postCode,
+    countryId: req.body.countryId,
+    latitude: req.body.latitude,
+    longitude: req.body.longitude,
+
+    generalComments: req.body.generalComments,
+    usageRestriction: req.body.usageRestriction,  
+    typeOfPlug: req.body.typeOfPlug  , 
+    typeOfCharger: req.body.typeOfCharger , 
+    active: req.body.active , 
+    dateAvailableStart: req.body.dateAvailableStart ,
+    dateAvailableEnd: req.body.dateAvailableEnd ,
+    hourStart: req.body.hourStart ,
+    hourEnd: req.body.hourEnd,
+
+    // connectionId: req.body.connectionId,
+
+    dateCreated: req.body.createAt,  
   });
+
   //mongoose method to save to the database
   charger
     .save()
@@ -91,9 +145,36 @@ router.post('/', upload.single('chargerPhoto'),(req, res, next) => {
       res.status(201).json({
         message: 'Created charger successfully',
         createdCharger: {
-          title: result.title,
-          cost_per_charge: result.cost_per_charge,
+
           _id: result._id,
+          // ownerId: result.ownerId,
+          title: result.title,
+          chargerPhoto: result.chargerPhoto,
+          costPerMinute: result.costPerMinute,
+          numberOfChargers: result.numberOfChargers,
+
+          street: result.street,
+          city: result.city,
+          stateOrProvince: result.stateOrProvince,
+          postCode: result.postCode,
+          countryId: result.countryId,
+          latitude: result.latitude,
+          longitude: result.longitude,
+
+          generalComments: result.generalComments , 
+          usageRestriction: result.usageRestriction, 
+          typeOfPlug: result.typeOfPlug  , 
+          typeOfCharger: result.typeOfCharger , 
+          active: result.active , 
+          dateAvailableStart: result.dateAvailableStart ,
+          dateAvailableEnd: result.dateAvailableEnd ,
+          hourStart: result.hourStart ,
+          hourEnd: result.hourEnd,
+
+          // connectionId: result.connectionId,
+
+          dateCreated: result.createAt, 
+
           request: {
             type: 'GET',
             url: 'http://localhost:3000/chargers/' + result._id
@@ -136,6 +217,7 @@ router.get('/:chargerId', (req, res, next) => {
 });
 
 router.patch('/:chargerId', (req, res, next) => {
+  console.log(req.body)
   const id = req.params.chargerId;
   const updateOps = {};  //update all Operations(Ops)
   for (const ops of req.body) {
@@ -173,7 +255,7 @@ router.delete('/:chargerId', (req, res, next) => {
       request: {
         type: 'POST',
         url: 'http://localhost:3000/chargers',
-        data: { title: 'String', cost_per_charge: 'Number' }
+        data: { title: 'String' }
       }
     });
   })
