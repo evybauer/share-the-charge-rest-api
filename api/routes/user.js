@@ -11,6 +11,7 @@ router.post('/signup', (req, res, next) => {
   User.find({ email: req.body.email})
   .exec()
   .then(user => {
+    console.log(user)
     if (user.length >= 1) {
       return res.status(409).json({
         message: 'Email exists'
@@ -25,7 +26,14 @@ router.post('/signup', (req, res, next) => {
         const user = new User({
           _id: new mongoose.Types.ObjectId(),
           email: req.body.email,
-          password: hash
+          password: hash,
+          firstName: req.body.firstName,
+          lastName: req.body.lastName,
+          dateOfBirth: req.body.dateOfBirth,
+          phoneNumber: req.body.phoneNumber,
+          creditCardNumber: req.body.creditCardNumber,
+          creditCardExpirationDate: req.body.creditCardExpirationDate,
+          creditCardCvv: req.body.creditCardCvv
       });
       user
       .save()
@@ -46,7 +54,6 @@ router.post('/signup', (req, res, next) => {
     }
   });
 });
-
 
 router.delete('/:userId', (req, res, next) => {
   User.remove({_id: req.params.userId})
