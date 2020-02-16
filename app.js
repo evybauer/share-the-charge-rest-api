@@ -9,6 +9,8 @@ const mongoose = require('mongoose');
 const chargerRoutes = require('./api/routes/chargers');
 const reservationRoutes = require('./api/routes/reservations');
 const userRoutes = require('./api/routes/user');
+const connectionTypeRoutes = require('./api/routes/connectionType');
+
 
 mongoose.Promise = require("bluebird");
 mongoose.connect(
@@ -47,6 +49,8 @@ app.use((req, res, next) => {
 app.use('/chargers', chargerRoutes);
 app.use('/reservations', reservationRoutes);
 app.use('/user', userRoutes);
+app.use('/connectionType', connectionTypeRoutes);
+
 
 //ERROR HANDLING
 app.use((req, res, next) => {
