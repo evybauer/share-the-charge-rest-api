@@ -1,9 +1,8 @@
 const express = require('express');
-const router = express.Router();
-// Express subpackage that gives capabilities to handle
-// different routes reaching different endpoints
+const router = express.Router(); // Express subpackage that gives capabilities to handle // different routes reaching different endpoints
 const mongoose = require('mongoose');
 const bcrypt = require('bcrypt');
+const jwt = require('jsonwebtoken'); // JsonWebToken --> (Restful servers cannot return Sessions because are stateless)
 
 const User = require('../models/user');
 
@@ -99,22 +98,6 @@ router.get('/', (req, res, next) => {
     });
 }); 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 router.get('/:userId', (req, res, next) => {
   const id = req.params.userId;
   User.findById(id)
@@ -159,6 +142,53 @@ router.patch('/:userId', (req, res, next) => {
         }
       });
   })
+    .catch(err => {
+      console.log(err);
+      res.status(500).json({
+        error: err
+      });
+    });
+  });
+
+
+  router.post('/login', (req, res, next) =>{
+    User.find({email: req.body.email})
+    .exec()
+    .then(user => {
+      if (user.length < 1) {
+        // return res.status(404).json({
+        //   message: 'Email not found, user doesn\'t exist' -- Not a good pattern
+          return res.status(401).json({
+          message: 'Authentication failed'
+
+        });
+      }
+      bcrypt.compare(req.body.password, user[0].password, (err, result) =>{
+        if (err) {
+          return res.status(401).json({
+            message: 'Authentication failed'
+          });
+        }
+        if (result) {
+          const token = jwt.sign({  // Generates the token
+            email: user[0].email,
+            userId: user[0]._id
+          }, 
+          process.env.JWT_KEY,
+          {
+            expiresIn: "1h", //Expiration time of the token
+          }
+        );
+          return res.status(200).json({
+            message: 'Authentication successful',
+            token: token
+          });
+        }
+        res.status(401).json({
+          message: 'Authentication failed' // We get two auth failed so there's no way to know if the password failed because of the password or the email
+        })
+      })
+    }) 
     .catch(err => {
       console.log(err);
       res.status(500).json({
