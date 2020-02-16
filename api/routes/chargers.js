@@ -38,7 +38,7 @@ const Charger = require('../models/charger');
 // ('/') means ('/chargers')
 router.get('/', (req, res, next) => {
   Charger.find()
-    // .select('title cost_per_charge _id chargerPhoto numberOfChargers') // To narrow the query
+    // .select('title chargerId chargerPhoto numberOfChargers') // To narrow the query
     // .select('-dateCreated') // To narrow the query
     .populate('connectionTypeId') // JOIN TABLES
     .exec()

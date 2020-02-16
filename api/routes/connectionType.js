@@ -65,15 +65,6 @@ router.post('/', (req, res, next) => {
     });
   });
 
-
-
-
-
-
-
-
-
-  
 router.get('/:connectionTypeId', (req, res, next) => {
   ConnectionType.findById(req.params.connectionTypeId)
     .populate('charger') // JOIN TABLES
@@ -126,25 +117,25 @@ router.patch('/:connectionTypeId', (req, res, next) => {
     });
   });
 
-  router.delete("/:connectionTypeId", (req, res, next) => {
-    ConnectionType.remove({ _id: req.params.connectionTypeId })
-      .exec()
-      .then(result => {
-        res.status(200).json({
-          message: "Connection type deleted",
-          request: {
-            type: "POST",
-            url: "http://localhost:3000/connectionType",
-            body: { formalName: "String", title: "String" }
-          }
-        });
-      })
-      .catch(err => {
-        res.status(500).json({
-          error: err
-        });
+router.delete("/:connectionTypeId", (req, res, next) => {
+  ConnectionType.remove({ _id: req.params.connectionTypeId })
+    .exec()
+    .then(result => {
+      res.status(200).json({
+        message: "Connection type deleted",
+        request: {
+          type: "POST",
+          url: "http://localhost:3000/connectionType",
+          body: { formalName: "String", title: "String" }
+        }
       });
-  });
+    })
+    .catch(err => {
+      res.status(500).json({
+        error: err
+      });
+    });
+});
 
 module.exports = router;
 
