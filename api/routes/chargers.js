@@ -40,6 +40,7 @@ router.get('/', (req, res, next) => {
   Charger.find()
     // .select('title cost_per_charge _id chargerPhoto numberOfChargers') // To narrow the query
     // .select('-dateCreated') // To narrow the query
+    .populate('connectionTypeId') // JOIN TABLES
     .exec()
     .then(docs => {
       const response = {

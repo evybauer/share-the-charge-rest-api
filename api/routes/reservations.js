@@ -7,8 +7,9 @@ const Charger = require('../models/charger');
 
 router.get('/', (req, res, next) => {
   Reservation.find()
-  // .select('charger date minutes total_price _id')
-  .populate('charger', 'user') // JOIN TABLES
+  .select('chargerId guestId date minutes total_price _id')
+  .populate('chargerId')
+  .populate('guestId') // JOIN TABLES
     .exec()
     .then(docs => {
       res.status(200).json({
@@ -16,7 +17,7 @@ router.get('/', (req, res, next) => {
         reservations: docs.map(doc => {
           return { 
             _id: doc._id,
-            chargerId: doc.charger,
+            chargerId: doc.chargerId,
             guestId: doc.guestId,
             date: doc.date,
             minutes: doc.minutes,

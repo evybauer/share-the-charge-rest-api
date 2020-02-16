@@ -25,7 +25,7 @@ const chargerSchema = mongoose.Schema({
   hourStart: { type: Number, required:true },
   hourEnd: { type: Number, required:true },
 
-  connectionTypeId: { type: mongoose.Schema.Types.ObjectId, ref: 'ConnectionType', required: true } , // Which connection type is the charger -- Dropdown menu
+  connectionTypeId: { type: Number, ref: 'ConnectionType', required: true } , // Which connection type is the charger -- Dropdown menu
 
   dateCreated: { type: Date, default: Date.now }
 
