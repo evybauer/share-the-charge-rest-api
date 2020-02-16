@@ -132,24 +132,24 @@ router.patch('/:reservationId', (req, res, next) => {
     });
   });
 
-  router.delete("/:reservationId", (req, res, next) => {
-    Reservation.remove({ _id: req.params.reservationId })
-      .exec()
-      .then(result => {
-        res.status(200).json({
-          message: "Reservation deleted",
-          request: {
-            type: "POST",
-            url: "http://localhost:3000/reservations",
-            body: { chargerId: "ID", date: "Number", minutes: "Number", total_price: "Number" }
-          }
-        });
-      })
-      .catch(err => {
-        res.status(500).json({
-          error: err
-        });
+router.delete("/:reservationId", (req, res, next) => {
+  Reservation.remove({ _id: req.params.reservationId })
+    .exec()
+    .then(result => {
+      res.status(200).json({
+        message: "Reservation deleted",
+        request: {
+          type: "POST",
+          url: "http://localhost:3000/reservations",
+          body: { chargerId: "ID", date: "Number", minutes: "Number", total_price: "Number" }
+        }
       });
-  });
+    })
+    .catch(err => {
+      res.status(500).json({
+        error: err
+      });
+    });
+});
 
 module.exports = router;
