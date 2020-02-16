@@ -1,6 +1,7 @@
 const express = require('express');
 const router = express.Router(); // Express subpackage that gives capabilities to handle  // different routes reaching different endpoints
 const mongoose = require('mongoose');
+// const checkAuth = require('../middleware/check-auth') // If we decied to use, uncomment and add checkAuth before (req, res,next)
 
 const Reservation = require('../models/reservation');
 const Charger = require('../models/charger');
