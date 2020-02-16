@@ -64,7 +64,6 @@ router.get('/', (req, res, next) => {
             longitude: doc.longitude,
 
             generalComments: doc.generalComments,
-            usageRestriction: doc.usageRestriction, 
             typeOfPlug: doc.typeOfPlug  , 
             typeOfCharger: doc.typeOfCharger , 
             active: doc.active , 
@@ -73,7 +72,7 @@ router.get('/', (req, res, next) => {
             hourStart: doc.hourStart ,
             hourEnd: doc.hourEnd,
 
-            // connectionId: doc.connectionId,
+            connectionTypeId: doc.connectionTypeId,
 
             dateCreated: doc.dateCreated,  
 
@@ -106,6 +105,7 @@ router.post('/', upload.single('chargerPhoto'),(req, res, next) => {
   // console.log(req.file); //-- Check info of the file uploaded
   //Store Data with Mongoose
   console.log(req.file);
+  console.log(req.body.connectionTypeId);
   const charger = new Charger({     
     _id: new mongoose.Types.ObjectId(),
     ownerId: req.body.ownerId,
@@ -123,7 +123,6 @@ router.post('/', upload.single('chargerPhoto'),(req, res, next) => {
     longitude: req.body.longitude,
 
     generalComments: req.body.generalComments,
-    usageRestriction: req.body.usageRestriction,  
     typeOfPlug: req.body.typeOfPlug  , 
     typeOfCharger: req.body.typeOfCharger , 
     active: req.body.active , 
@@ -132,7 +131,7 @@ router.post('/', upload.single('chargerPhoto'),(req, res, next) => {
     hourStart: req.body.hourStart ,
     hourEnd: req.body.hourEnd,
 
-    // connectionId: req.body.connectionId,
+    connectionTypeId: req.body.connectionTypeId,
 
     dateCreated: req.body.createAt,  
   });
@@ -162,7 +161,6 @@ router.post('/', upload.single('chargerPhoto'),(req, res, next) => {
           longitude: result.longitude,
 
           generalComments: result.generalComments , 
-          usageRestriction: result.usageRestriction, 
           typeOfPlug: result.typeOfPlug  , 
           typeOfCharger: result.typeOfCharger , 
           active: result.active , 
@@ -171,7 +169,7 @@ router.post('/', upload.single('chargerPhoto'),(req, res, next) => {
           hourStart: result.hourStart ,
           hourEnd: result.hourEnd,
 
-          // connectionId: result.connectionId,
+          connectionTypeId: result.connectionTypeId,
 
           dateCreated: result.createAt, 
 
