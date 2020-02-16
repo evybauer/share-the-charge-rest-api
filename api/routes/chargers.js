@@ -2,6 +2,7 @@ const express = require('express');
 const router = express.Router(); // Express subpackage that gives capabilities to handle // different routes reaching different endpoints
 const mongoose = require('mongoose')
 const multer = require('multer') //Package that allows body-parser pass data other than json (ex.: photos)
+// const checkAuth = require('../middleware/check-auth'); // If we decied to use, uncomment and add checkAuth before upload.single('chargerPhoto'), except the get route
 
 //PHOTOS STORAGE
 const storage = multer.diskStorage({
@@ -102,7 +103,7 @@ router.get('/', (req, res, next) => {
 
 //upload.single() is a middleware handling event that accespt one single file. 
 //Is passed as an argument in the POST route so it uploads the photo accordingly
-router.post('/', upload.single('chargerPhoto'),(req, res, next) => {
+router.post('/', upload.single('chargerPhoto'), (req, res, next) => {
   // console.log(req.file); //-- Check info of the file uploaded
   //Store Data with Mongoose
   console.log(req.file);
@@ -192,7 +193,7 @@ router.post('/', upload.single('chargerPhoto'),(req, res, next) => {
 router.get('/:chargerId', (req, res, next) => {
   const id = req.params.chargerId;
   Charger.findById(id)
-  .select('title cost_per_charge _id chargerPhoto')
+  .populate('connectionTypeId') // JOIN TABLES
   .exec()
   .then(doc => {
     console.log('From database', doc);
@@ -247,6 +248,7 @@ router.delete('/:chargerId', (req, res, next) => {
   Charger.remove({
     _id: id
   })
+  .select('title _id ownerId chargerId') // To narrow the query
   .exec()
   .then(result => {
     res.status(200).json({
@@ -254,9 +256,9 @@ router.delete('/:chargerId', (req, res, next) => {
       request: {
         type: 'POST',
         url: 'http://localhost:3000/chargers',
-        data: { title: 'String' }
+        // data: { title: 'String' }
       }
-    });
+    })
   })
   .catch(err => {
     console.log(err);
