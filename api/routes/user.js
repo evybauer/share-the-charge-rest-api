@@ -39,7 +39,13 @@ router.post('/signup', (req, res, next) => {
       .then(result => {
         console.log(result)
         res.status(201).json({
-          message: 'User created'
+          message: 'User created',
+          createdUser: {
+            _id: result._id,
+            email: result.email,
+            firstName: result.firstName,
+            lastName: result.lastName,
+          }
         });
       })
       .catch(err => {
@@ -107,7 +113,7 @@ router.get('/:userId', (req, res, next) => {
     console.log('From database', doc);
     if (doc) {
       res.status(200).json({
-        charger: doc,
+        user: doc,
         request: {
           type: 'GET',
           description: 'Gets all users',
