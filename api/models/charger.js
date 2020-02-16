@@ -2,7 +2,7 @@ const mongoose = require('mongoose');
 
 const chargerSchema = mongoose.Schema({
   _id: mongoose.Schema.Types.ObjectId,
-  // ownerId: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true } , // Which user created
+  ownerId: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true } , // Which user created
 
   title: { type: String, required:true },
   chargerPhoto: { type: String }, // We can require the image or not
@@ -34,10 +34,3 @@ const chargerSchema = mongoose.Schema({
 });
 
 module.exports = mongoose.model('Charger', chargerSchema);
-
-/*
-  CostPerMinute: "$0.40/min >=60kW; $0.20/min <60kW; other tariffs for older cars"
-  "Charging22 Superchargers, available 24/7, up to 72kW",
-  updatedAt: new Date(),
-  {updatedAt: 'updated_at'}
-*/
