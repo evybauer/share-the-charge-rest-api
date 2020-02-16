@@ -5,7 +5,7 @@ const chargerSchema = mongoose.Schema({
   ownerId: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true } , // Which user created
 
   title: { type: String, required:true },
-  chargerPhoto: { type: String }, // We can require the image or not
+  // chargerPhoto: { type: String }, // We can require the image or not
   costPerMinute: { type: Number, required:true },
   numberOfChargers: { type: Number, required: true, default: 1 },
 

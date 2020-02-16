@@ -4,35 +4,37 @@ const mongoose = require('mongoose')
 const multer = require('multer') //Package that allows body-parser pass data other than json (ex.: photos)
 // const checkAuth = require('../middleware/check-auth'); // If we decied to use, uncomment and add checkAuth before upload.single('chargerPhoto'), except the get route
 
-//PHOTOS STORAGE
-const storage = multer.diskStorage({
-  destination: function(req, file, cb) {
-    cb(null, './uploads/');
-  },
-  filename: function(req, file, cb) {
-    cb(null, new Date().toISOString() + file.originalname);
-  }
-});
+/*
+  //PHOTOS STORAGE
+  const storage = multer.diskStorage({
+    destination: function(req, file, cb) {
+      cb(null, './uploads/');
+    },
+    filename: function(req, file, cb) {
+      cb(null, new Date().toISOString() + file.originalname);
+    }
+  });
 
-//PHOTO FILTER -- Check if file type is accepted by the DB
-const fileFilter = ( req, file, cb) => {
-  if (file.mimetype === 'image/jpeg' || file.mimetype === 'image/png') {
-     //accept a file
-    cb(null, true);
-  } else {
-    //reject a file
-    cb(null, false);
-  }
-};
+  //PHOTO FILTER -- Check if file type is accepted by the DB
+  const fileFilter = ( req, file, cb) => {
+    if (file.mimetype === 'image/jpeg' || file.mimetype === 'image/png') {
+      //accept a file
+      cb(null, true);
+    } else {
+      //reject a file
+      cb(null, false);
+    }
+  };
 
-//PHOTO FILTER -- Check if file size is accepted by the DB
-const upload = multer({
-  storage: storage, 
-  limits: {
-    fileSize: 1024 * 1024 * 5
-  },
-  fileFilter: fileFilter
-}); // dest: 'uploads/' -- initialize multer and store all the photos into a destination: uploads folder
+  //PHOTO FILTER -- Check if file size is accepted by the DB
+  const upload = multer({
+    storage: storage, 
+    limits: {
+      fileSize: 1024 * 1024 * 5
+    },
+    fileFilter: fileFilter
+  }); // dest: 'uploads/' -- initialize multer and store all the photos into a destination: uploads folder
+*/
 
 const Charger = require('../models/charger');
 
@@ -53,7 +55,7 @@ router.get('/', (req, res, next) => {
             ownerId: doc.ownerId,
 
             title: doc.title,
-            chargerPhoto: doc.chargerPhoto,
+            // chargerPhoto: doc.chargerPhoto,
             costPerMinute: doc.costPerMinute,
             numberOfChargers: doc.numberOfChargers,
 
@@ -103,7 +105,7 @@ router.get('/', (req, res, next) => {
 
 //upload.single() is a middleware handling event that accespt one single file. 
 //Is passed as an argument in the POST route so it uploads the photo accordingly
-router.post('/', upload.single('chargerPhoto'), (req, res, next) => {
+router.post('/', (req, res, next) => {
   // console.log(req.file); //-- Check info of the file uploaded
   //Store Data with Mongoose
   console.log(req.file);
@@ -112,7 +114,7 @@ router.post('/', upload.single('chargerPhoto'), (req, res, next) => {
     _id: new mongoose.Types.ObjectId(),
     ownerId: req.body.ownerId,
     title: req.body.title,
-    chargerPhoto: req.file.path, // Photo URL
+    // chargerPhoto: req.file.path, // Photo URL
     costPerMinute: req.body.costPerMinute,
     numberOfChargers: req.body.numberOfChargers,
 
@@ -150,7 +152,7 @@ router.post('/', upload.single('chargerPhoto'), (req, res, next) => {
           _id: result._id,
           ownerId: result.ownerId,
           title: result.title,
-          chargerPhoto: result.chargerPhoto,
+          // chargerPhoto: result.chargerPhoto,
           costPerMinute: result.costPerMinute,
           numberOfChargers: result.numberOfChargers,
 
