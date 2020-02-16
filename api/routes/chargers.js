@@ -48,7 +48,7 @@ router.get('/', (req, res, next) => {
           return {
 
             _id: doc._id,
-            // ownerId: doc.ownerId,
+            ownerId: doc.ownerId,
 
             title: doc.title,
             chargerPhoto: doc.chargerPhoto,
@@ -108,7 +108,7 @@ router.post('/', upload.single('chargerPhoto'),(req, res, next) => {
   console.log(req.file);
   const charger = new Charger({     
     _id: new mongoose.Types.ObjectId(),
-    // ownerId: req.body.ownerId,
+    ownerId: req.body.ownerId,
     title: req.body.title,
     chargerPhoto: req.file.path, // Photo URL
     costPerMinute: req.body.costPerMinute,
@@ -147,7 +147,7 @@ router.post('/', upload.single('chargerPhoto'),(req, res, next) => {
         createdCharger: {
 
           _id: result._id,
-          // ownerId: result.ownerId,
+          ownerId: result.ownerId,
           title: result.title,
           chargerPhoto: result.chargerPhoto,
           costPerMinute: result.costPerMinute,
