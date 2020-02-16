@@ -18,8 +18,6 @@ const chargerSchema = mongoose.Schema({
   longitude: { type: Number, required:true },
 
   generalComments: { type: String, required:true }, 
-  usageRestriction: { type: String, required:true }, 
-  typeOfPlug: { type: String, required:true }, 
   typeOfCharger: { type: String, required:true }, 
   active: { type: Boolean, required:true }, 
   dateAvailableStart: { type: Date, required:true },
@@ -27,7 +25,7 @@ const chargerSchema = mongoose.Schema({
   hourStart: { type: Number, required:true },
   hourEnd: { type: Number, required:true },
 
-  // connectionId: { type: mongoose.Schema.Types.ObjectId, ref: 'Connection', required: true } , // Which user created
+  connectionTypeId: { type: mongoose.Schema.Types.ObjectId, ref: 'ConnectionType', required: true } , // Which connection type is the charger -- Dropdown menu
 
   dateCreated: { type: Date, default: Date.now }
 
