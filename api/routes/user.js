@@ -55,6 +55,118 @@ router.post('/signup', (req, res, next) => {
   });
 });
 
+// ALL USERS
+router.get('/', (req, res, next) => {
+  User.find()
+    // .select('email password') // To narrow the query
+    // .select('-creditCardNumber') // To narrow the query
+    .exec()
+    .then(docs => {
+      const response = {
+        count: docs.length,
+        users: docs.map(doc => {
+          return {
+            _id: doc._id,
+            email: doc.email,
+            password: doc.hash,
+            firstName: doc.firstName,
+            lastName: doc.lastName,
+            dateOfBirth: doc.dateOfBirth,
+            phoneNumber: doc.phoneNumber,
+            creditCardNumber: doc.creditCardNumber,
+            creditCardExpirationDate: doc.creditCardExpirationDate,
+            creditCardCvv: doc.creditCardCvv,
+            request: {
+              type: 'GET',
+              url: 'http://localhost:3000/users/' + doc._id
+            }
+          }
+        })
+      };      
+      // if (docs.lenght >= 0) {    -- Can se to check that the information of the array is not null -- OPTIONAL: comment out just in case
+        res.status(200).json(response);
+      // } else {
+      //   res.status(404).json({
+      //     message: 'No entries found'
+      //   });
+      // }
+    })
+    .catch(err => {
+      console.log(err);
+      res.status(500).json({
+        error: err
+      });
+    });
+}); 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+router.get('/:userId', (req, res, next) => {
+  const id = req.params.userId;
+  User.findById(id)
+  // .select('')
+  .exec()
+  .then(doc => {
+    console.log('From database', doc);
+    if (doc) {
+      res.status(200).json({
+        charger: doc,
+        request: {
+          type: 'GET',
+          description: 'Gets all users',
+          url: 'http://localhost:3000/users/'
+        }
+        }); 
+    } else {
+      res.status(404).json({message: 'No valid entry found for provided ID'});
+    }
+  })
+  .catch(err => {
+    console.log(err);
+    res.status(500).json({error: err})
+  });
+});
+
+router.patch('/:userId', (req, res, next) => {
+  console.log(req.body)
+  const id = req.params.userId;
+  const updateOps = {};  //update all Operations(Ops)
+  for (const ops of req.body) {
+    updateOps[ops.propTitle] = ops.value;
+  }
+  User.update({_id : id},{$set: updateOps})
+    .exec()
+    .then(result => {
+      res.status(200).json({
+        message: 'User updated',
+        request: {
+          type: 'GET',
+          url: 'http://localhost:3000/user/' + id
+        }
+      });
+  })
+    .catch(err => {
+      console.log(err);
+      res.status(500).json({
+        error: err
+      });
+    });
+  });
+
 router.delete('/:userId', (req, res, next) => {
   User.remove({_id: req.params.userId})
   .exec()
@@ -71,5 +183,6 @@ router.delete('/:userId', (req, res, next) => {
     });
   });
 });
+
 
 module.exports = router; 
