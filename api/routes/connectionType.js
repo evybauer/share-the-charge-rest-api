@@ -16,7 +16,6 @@ router.get('/', (req, res, next) => {
         connection: docs.map(doc => {
           return { 
             _id: doc._id,
-            chargerId: doc.chargerId,
             formalName: doc.formalName,
             title: doc.title,
             request: {
@@ -35,28 +34,20 @@ router.get('/', (req, res, next) => {
 });
 
 router.post('/', (req, res, next) => {
-  Charger.findById(req.body.chargerId)
-  .then(charger => {
-    if (!charger) {
-      return res.status(404).json({
-        message: 'Connection type not found'
-      })
-    }
     const connectionType = new ConnectionType({
-      _id: mongoose.Types.ObjectId(),
-      chargerId: req.body.chargerId,
+      // _id: mongoose.Types.ObjectId(),
+      _id: req.body._id,
       formalName: req.body.formalName,
       title: req.body.title,
     });
-    return connectionType.save()
-  })
-      .then(result => {
-        console.log(result);
-        res.status(201).json({
+    connectionType
+    .save()
+    .then(result => {
+      console.log(result);
+      res.status(201).json({
           message: 'Connection type created',
           createdConnectionType: {
             _id: result._id,
-            chargerId: result.chargerId,
             formalName: result.formalName,
             title: result.title,
           },
@@ -73,6 +64,15 @@ router.post('/', (req, res, next) => {
       });
     });
   });
+
+
+
+
+
+
+
+
+
   
 router.get('/:connectionTypeId', (req, res, next) => {
   ConnectionType.findById(req.params.connectionTypeId)
@@ -135,7 +135,7 @@ router.patch('/:connectionTypeId', (req, res, next) => {
           request: {
             type: "POST",
             url: "http://localhost:3000/connectionType",
-            body: { chargerId: "ID", date: "Number", minutes: "Number", total_price: "Number" }
+            body: { formalName: "String", title: "String" }
           }
         });
       })
