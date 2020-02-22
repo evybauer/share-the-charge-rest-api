@@ -10,7 +10,7 @@ const chargerSchema = mongoose.Schema({
 
   title: { type: String, required: true },
   // chargerPhoto: { type: String }, // We can require the image or not
-  costPerMinute: { type: Number, required: true },
+  costPerKWh: { type: Number, required: true },
   numberOfChargers: { type: Number, required: true, default: 1 },
 
   street: { type: String, required: true },
@@ -22,7 +22,7 @@ const chargerSchema = mongoose.Schema({
   longitude: { type: Number, required: true },
 
   generalComments: { type: String, required: true },
-  typeOfCharger: { type: String, required: true },
+  typeOfCharger: { type: String, default: 'Domestic' },
   active: { type: Boolean, required: true },
   dateAvailableStart: { type: Date, required: true },
   dateAvailableEnd: { type: Date, required: true },
