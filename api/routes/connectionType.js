@@ -20,7 +20,7 @@ const Charger = require("../models/charger");
 
 router.get("/", (req, res, next) => {
   ConnectionType.find()
-    // .select('charger date minutes total_price _id')
+    // .select('charger date hours total_price _id')
     .populate("charger") // JOIN TABLES
     .exec()
     .then(docs => {
