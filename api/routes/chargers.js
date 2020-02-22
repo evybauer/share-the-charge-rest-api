@@ -67,7 +67,7 @@ router.get("/", (req, res, next) => {
 
             title: doc.title,
             // chargerPhoto: doc.chargerPhoto,
-            costPerMinute: doc.costPerMinute,
+            costPerKWh: doc.costPerKWh,
             numberOfChargers: doc.numberOfChargers,
 
             street: doc.street,
@@ -79,7 +79,6 @@ router.get("/", (req, res, next) => {
             longitude: doc.longitude,
 
             generalComments: doc.generalComments,
-            typeOfPlug: doc.typeOfPlug,
             typeOfCharger: doc.typeOfCharger,
             active: doc.active,
             dateAvailableStart: doc.dateAvailableStart,
@@ -135,7 +134,7 @@ router.get("/", (req, res, next) => {
  *                  type: string
  *                title:
  *                  type: string
- *                costPerMinute:
+ *                costPerKWh:
  *                  type: number
  *                numberOfChargers:
  *                  type: number
@@ -152,8 +151,6 @@ router.get("/", (req, res, next) => {
  *                longitude:
  *                  type: number
  *                generalComments:
- *                  type: string
- *                typeOfPlug:
  *                  type: string
  *                typeOfCharger:
  *                  type: string
@@ -188,7 +185,7 @@ router.post("/", (req, res, next) => {
     ownerId: req.body.ownerId,
     title: req.body.title,
     // chargerPhoto: req.file.path, // Photo URL
-    costPerMinute: req.body.costPerMinute,
+    costPerKWh: req.body.costPerKWh,
     numberOfChargers: req.body.numberOfChargers,
 
     street: req.body.street,
@@ -200,7 +197,6 @@ router.post("/", (req, res, next) => {
     longitude: req.body.longitude,
 
     generalComments: req.body.generalComments,
-    typeOfPlug: req.body.typeOfPlug,
     typeOfCharger: req.body.typeOfCharger,
     active: req.body.active,
     dateAvailableStart: req.body.dateAvailableStart,
@@ -225,7 +221,7 @@ router.post("/", (req, res, next) => {
           ownerId: result.ownerId,
           title: result.title,
           // chargerPhoto: result.chargerPhoto,
-          costPerMinute: result.costPerMinute,
+          costPerKWh: result.costPerKWh,
           numberOfChargers: result.numberOfChargers,
 
           street: result.street,
@@ -237,7 +233,6 @@ router.post("/", (req, res, next) => {
           longitude: result.longitude,
 
           generalComments: result.generalComments,
-          typeOfPlug: result.typeOfPlug,
           typeOfCharger: result.typeOfCharger,
           active: result.active,
           dateAvailableStart: result.dateAvailableStart,
