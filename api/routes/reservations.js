@@ -8,7 +8,7 @@ const Charger = require("../models/charger");
 
 router.get("/", (req, res, next) => {
   Reservation.find()
-    .select("chargerId guestId date minutes total_price _id")
+    .select("chargerId guestId date hours total_price _id")
     .populate("chargerId")
     .populate("guestId") // JOIN TABLES
     .exec()
@@ -21,7 +21,7 @@ router.get("/", (req, res, next) => {
             chargerId: doc.chargerId,
             guestId: doc.guestId,
             date: doc.date,
-            minutes: doc.minutes,
+            hours: doc.hours,
             totalPrice: doc.totalPrice,
             request: {
               type: "GET",
@@ -51,7 +51,7 @@ router.post("/", (req, res, next) => {
         chargerId: req.body.chargerId,
         guestId: req.body.guestId,
         date: req.body.date,
-        minutes: req.body.minutes,
+        hours: req.body.hours,
         totalPrice: req.body.totalPrice
       });
       return reservation.save();
@@ -65,7 +65,7 @@ router.post("/", (req, res, next) => {
           chargerId: result.chargerId,
           guestId: result.guestId,
           date: result.date,
-          minutes: result.minutes,
+          hours: result.hours,
           totalPrice: result.totalPrice
         },
         request: {
@@ -145,7 +145,7 @@ router.delete("/:reservationId", (req, res, next) => {
           body: {
             chargerId: "ID",
             date: "Number",
-            minutes: "Number",
+            hours: "Number",
             total_price: "Number"
           }
         }
@@ -172,6 +172,35 @@ router.get("/byGuest/:guestId", (req, res, next) => {
         });
       }
       res.status(200).json({
+        reservation: reservation,
+        request: {
+          type: "GET",
+          url: "http://localhost:3000/reservations"
+        }
+      });
+    })
+    .catch(err => {
+      res.status(500).json({
+        error: err
+      });
+    });
+});
+
+/// RESERVATIONS BY GUEST API BELOW ///
+
+router.get("/byCharger/:chargerId", (req, res, next) => {
+  Reservation.find({ chargerId: req.params.chargerId })
+    .populate("chargerId") // JOIN TABLES
+    .populate("guestId") // JOIN TABLES
+    .exec()
+    .then(reservation => {
+      if (!reservation) {
+        return res.status(404).json({
+          message: "Reservation not found"
+        });
+      }
+      res.status(200).json({
+        count: reservation.length,
         reservation: reservation,
         request: {
           type: "GET",
