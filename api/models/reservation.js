@@ -5,7 +5,7 @@ const reservationSchema = mongoose.Schema({
   chargerId: { type: mongoose.Schema.Types.ObjectId, ref: 'Charger', required: true } , // Which charger was chosen
   guestId: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true } , // Which user booked
   date: { type: Date, required:true },
-  minutes: { type: Number, required:true },
+  hours: { type: Number, required:true },
   totalPrice: { type: Number, required:true },
 });
 
