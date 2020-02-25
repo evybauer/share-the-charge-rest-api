@@ -164,6 +164,7 @@ router.post("/login", (req, res, next) => {
   User.find({ email: req.body.email })
     .exec()
     .then(user => {
+      console.log(user)
       if (user.length < 1) {
         // return res.status(404).json({
         //   message: 'Email not found, user doesn\'t exist' -- Not a good pattern
@@ -190,6 +191,15 @@ router.post("/login", (req, res, next) => {
             }
           );
           return res.status(200).json({
+            _id: user[0]._id,
+            email: user[0].email,
+            firstName: user[0].firstName,
+            lastName: user[0].lastName,
+            dateOfBirth: user[0].dateOfBirth,
+            phoneNumber: user[0].phoneNumber,
+            creditCardNumber: user[0].creditCardNumber,
+            creditCardExpirationDate: user[0].creditCardExpirationDate,
+            creditCardCvv: user[0].creditCardCvv,
             message: "Authentication successful",
             token: token
           });
