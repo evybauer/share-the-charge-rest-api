@@ -26,8 +26,8 @@ const chargerSchema = mongoose.Schema({
   active: { type: Boolean, required: true },
   dateAvailableStart: { type: Date, required: true },
   dateAvailableEnd: { type: Date, required: true },
-  hourStart: { type: Number, required: true },
-  hourEnd: { type: Number, required: true },
+  hourStart: { type: Number },
+  hourEnd: { type: Number },
 
   connectionTypeId: { type: Number, ref: "ConnectionType", required: true }, // Which connection type is the charger -- Dropdown menu
   pictureUrl: { type: String },
